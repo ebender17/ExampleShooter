@@ -13,6 +13,9 @@ class EXAMPLESHOOTER_API AShooterCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintPure)
+	bool IsDead() const;
+
 	// Sets default values for this character's properties
 	AShooterCharacter();
 
