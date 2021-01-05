@@ -9,6 +9,7 @@
 /**
  * 
  */
+class UBehaviorTree;
 UCLASS()
 class EXAMPLESHOOTER_API AShooterAIController : public AAIController
 {
@@ -20,5 +21,5 @@ protected:
 	virtual void BeginPlay() override;
 private:
 	UPROPERTY(EditAnywhere)
-	float AcceptanceRadius = 200.f; 
+	UBehaviorTree* AIBehavior; 
 };
