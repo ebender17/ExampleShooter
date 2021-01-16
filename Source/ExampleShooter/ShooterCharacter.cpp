@@ -4,6 +4,7 @@
 #include "ShooterCharacter.h"
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
+#include "ExampleShooterGameModeBase.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -89,9 +90,18 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 
 	if (IsDead())
 	{
+		//Call to game mode that character has been killed
+		AExampleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<AExampleShooterGameModeBase>();
+
+		if (GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
+
 		//Detach controller from character, stops AI from shooting and us from moving and shooting
 		DetachFromControllerPendingDestroy(); 
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
+
 	}
 
 	return DamageToApply;

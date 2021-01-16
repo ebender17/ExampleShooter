@@ -12,6 +12,9 @@
 UCLASS()
 class EXAMPLESHOOTER_API AExampleShooterGameModeBase : public AGameModeBase
 {
-	GENERATED_BODY()
+	GENERATED_BODY() 
+
+public:
+	virtual void PawnKilled(APawn* PawnKilled); 
 	
 };
