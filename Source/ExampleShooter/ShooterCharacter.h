@@ -16,6 +16,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	UFUNCTION(BlueprintPure)
+	float GetHealthPercent() const;
+
 	// Sets default values for this character's properties
 	AShooterCharacter();
 
