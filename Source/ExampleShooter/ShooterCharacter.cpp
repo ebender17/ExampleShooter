@@ -21,11 +21,21 @@ void AShooterCharacter::BeginPlay()
 
 	Health = MaxHealth;
 
-	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-	Gun->SetOwner(this);
+
+	for (int i = 0; i < GunsClass.Num(); i++)
+	{
+		//Spawn all weapons 
+		Guns.Add(GetWorld()->SpawnActor<AGun>(GunsClass[i]));
 	
+		Guns[i]->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+		Guns[i]->SetOwner(this);
+		if (WeaponSelected != i)
+		{
+			Guns[i]->SetActorHiddenInGame(true);
+		}
+	}
+
 }
 
 // Called every frame
@@ -48,6 +58,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AShooterCharacter::LookRightRate);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed,this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &AShooterCharacter::Shoot);
+	PlayerInputComponent->BindAction(TEXT("SelectPrimary"), IE_Pressed, this, &AShooterCharacter::SelectPrimary);
+	PlayerInputComponent->BindAction(TEXT("SelectSecondary"), IE_Pressed, this, &AShooterCharacter::SelectSecondary);
 }
 
 void AShooterCharacter::MoveForward(float AxisValue)
@@ -77,10 +89,40 @@ void AShooterCharacter::LookRightRate(float AxisValue)
 
 void AShooterCharacter::Shoot()
 {
-	Gun->PullTrigger();
+	Guns[WeaponSelected]->PullTrigger();
 
 }
 
+void AShooterCharacter::SelectPrimary()
+{
+	WeaponSelected = 0; 
+	UE_LOG(LogTemp, Warning, TEXT("Primary Selected"));
+
+	ShowWeaponSelected(); 
+}
+
+void AShooterCharacter::SelectSecondary()
+{
+	WeaponSelected = 1; 
+	UE_LOG(LogTemp, Warning, TEXT("Secondary Selected"));
+	
+	ShowWeaponSelected();
+}
+
+void AShooterCharacter::ShowWeaponSelected()
+{
+	for (int i = 0; i < GunsClass.Num(); i++)
+	{
+		if (WeaponSelected == i)
+		{
+			Guns[i]->SetActorHiddenInGame(false);
+		}
+		else
+		{
+			Guns[i]->SetActorHiddenInGame(true);
+		}
+	}
+}
 
 float AShooterCharacter::GetHealthPercent() const
 {

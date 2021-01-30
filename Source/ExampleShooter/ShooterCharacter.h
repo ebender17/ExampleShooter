@@ -30,7 +30,11 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	void Shoot();
+	virtual void Shoot();
+
+	void SelectPrimary();
+
+	void SelectSecondary(); 
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,19 +45,29 @@ private:
 	void MoveRight(float AxisValue); 
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
+	void ShowWeaponSelected();
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 10.f;
 
 	UPROPERTY(EditDefaultsOnly)
+	TArray<TSubclassOf<AGun>> GunsClass; 
+
+	UPROPERTY()
+	TArray<AGun*> Guns; 
+
+	/*UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AGun> GunClass; 
 
 	UPROPERTY()
-	AGun* Gun;
+	AGun* Gun;*/
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100.f;
 	UPROPERTY(VisibleAnywhere)
 	float Health;
+
+	//Used to indicate gun currently active
+	uint8 WeaponSelected = 0; 
 
 };
